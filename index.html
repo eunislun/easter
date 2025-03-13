@@ -16,14 +16,14 @@
         }
         #game-board {
             display: grid;
-            grid-template-columns: repeat(4, 120px); /* 4 列，寬度增加 */
-            grid-template-rows: repeat(4, 160px);    /* 4 行，高度增加 */
+            grid-template-columns: repeat(4, 80px); /* 4 列，寬度縮小 */
+            grid-template-rows: repeat(4, 100px);  /* 4 行，高度縮小 */
             gap: 10px;
             margin-bottom: 20px;
         }
         .card {
-            width: 120px; /* 寬度增加 */
-            height: 160px; /* 高度增加 */
+            width: 80px;  /* 寬度縮小 */
+            height: 100px; /* 高度縮小 */
             perspective: 1000px;
             cursor: pointer;
         }
@@ -50,13 +50,13 @@
         .card-front {
             background-color: #fff1a6;
             transform: rotateY(180deg);
-            font-size: 3em; /* Emoji 更大 */
+            font-size: 2em; /* Emoji 大小調整 */
         }
         .card-back {
             background-color: #f3a8bc;
             border: 2px solid #999;
             color: #ffffff; /* TBMG 字顏色（白色） */
-            font-size: 1.5em; /* TBMG 字更大 */
+            font-size: 1.2em; /* TBMG 字大小調整 */
         }
         #stats {
             margin-bottom: 20px;
@@ -68,14 +68,9 @@
             cursor: pointer;
             margin: 5px;
         }
-        #countdown {
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
     </style>
 </head>
 <body>
-    <div id="countdown">5</div>
     <div id="stats">
         時間: <span id="timer">0</span> 秒 | 
         翻牌次數: <span id="flip-count">0</span> | 
@@ -96,7 +91,6 @@
         const matchCountDisplay = document.getElementById('match-count');
         const restartButton = document.getElementById('restart-button');
         const startButton = document.getElementById('start-button');
-        const countdownDisplay = document.getElementById('countdown');
 
         let cards = [];
         let flippedCards = [];
@@ -105,7 +99,6 @@
         let matchCount = 0;
         let timer = 0;
         let timerInterval;
-        let countdown = 5;
 
         // 初始化遊戲
         function initGame() {
@@ -148,30 +141,6 @@
             cards.forEach(card => {
                 card.style.pointerEvents = 'none';
             });
-
-            // 隱藏倒數
-            countdownDisplay.style.display = 'none';
-        }
-
-        // 開始倒數
-        function startCountdown() {
-            countdown = 5;
-            countdownDisplay.textContent = countdown;
-            countdownDisplay.style.display = 'block';
-
-            const countdownInterval = setInterval(() => {
-                countdown--;
-                countdownDisplay.textContent = countdown;
-
-                if (countdown <= 0) {
-                    clearInterval(countdownInterval);
-                    countdownDisplay.textContent = '開始！';
-                    setTimeout(() => {
-                        countdownDisplay.style.display = 'none';
-                        startGame();
-                    }, 1000);
-                }
-            }, 1000);
         }
 
         // 開始遊戲
@@ -239,7 +208,7 @@
 
         // 開始遊戲按鈕
         startButton.addEventListener('click', () => {
-            startCountdown();
+            startGame();
             startButton.style.display = 'none'; // 隱藏開始按鈕
         });
 
