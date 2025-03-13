@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>復活節翻牌記憶遊戲</title>
+    <title>復活節記憶大挑戰</title>
     <style>
         body {
-            font-family: Times New Roman, 宋體;
+            font-family: 'Times New Roman', '新細明體', serif; /* 英文字體為 Times New Roman，中文字體為新細明體 */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -14,16 +14,22 @@
             padding: 20px;
             background-color: #b3daf1;
         }
+        #game-title {
+            font-size: 2.5em;
+            color: #d9534f;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
         #game-board {
             display: grid;
-            grid-template-columns: repeat(4, 80px); /* 4 列，寬度縮小 */
-            grid-template-rows: repeat(4, 100px);  /* 4 行，高度縮小 */
+            grid-template-columns: repeat(4, 78px); /* 4 列，寬度設為 78px */
+            grid-template-rows: repeat(4, 88px);   /* 4 行，高度設為 98px */
             gap: 10px;
             margin-bottom: 20px;
         }
         .card {
-            width: 75px;  /* 寬度縮小 */
-            height: 95px; /* 高度縮小 */
+            width: 78px;  /* 寬度設為 78px */
+            height: 98px; /* 高度設為 98px */
             perspective: 1000px;
             cursor: pointer;
         }
@@ -68,17 +74,51 @@
             cursor: pointer;
             margin: 5px;
         }
+        #rules {
+            margin-top: 30px;
+            font-size: 1.1em;
+            color: #333;
+            text-align: left;
+            max-width: 400px;
+            line-height: 1.6;
+        }
+        #rules ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #rules ul li {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
+    <!-- 頁面頂部：遊戲名稱 -->
+    <div id="game-title">復活節記憶大挑戰</div>
+
+    <!-- 遊戲統計數據 -->
     <div id="stats">
         時間: <span id="timer">0</span> 秒 | 
-        翻牌次數: <span id="flip-count">0</span> | 
-        配對次數: <span id="match-count">0</span>
+        翻牌次數: <span id="flip-count">0</span>
     </div>
+
+    <!-- 遊戲板 -->
     <div id="game-board"></div>
+
+    <!-- 按鈕 -->
     <button id="start-button">開始遊戲</button>
     <button id="restart-button">重新開始</button>
+
+    <!-- 頁面底部：遊戲規則 -->
+    <div id="rules">
+        <strong>遊戲規則：</strong>
+        <ul>
+            <li>🔹️ 在最短的時間內，找到所有相同的牌並完成配對。</li>
+            <li>🔹️ 每次可以翻開兩張牌。</li>
+            <li>🔹️ 如果兩張牌的圖案相同，則配對成功，牌會保持正面顯示。</li>
+            <li>🔹️ 如果兩張牌的圖案不同，牌會自動翻回背面。</li>
+            <li>🔹️ 當所有牌都成功配對後，遊戲結束。</li>
+        </ul>
+    </div>
 
     <script>
         const emojis = [
@@ -88,7 +128,6 @@
         const gameBoard = document.getElementById('game-board');
         const timerDisplay = document.getElementById('timer');
         const flipCountDisplay = document.getElementById('flip-count');
-        const matchCountDisplay = document.getElementById('match-count');
         const restartButton = document.getElementById('restart-button');
         const startButton = document.getElementById('start-button');
 
@@ -96,7 +135,6 @@
         let flippedCards = [];
         let matchedCards = [];
         let flipCount = 0;
-        let matchCount = 0;
         let timer = 0;
         let timerInterval;
 
@@ -106,7 +144,6 @@
             flippedCards = [];
             matchedCards = [];
             flipCount = 0;
-            matchCount = 0;
             timer = 0;
             clearInterval(timerInterval);
             updateStats();
@@ -179,13 +216,11 @@
 
             if (firstEmoji === secondEmoji) {
                 matchedCards.push(firstCard, secondCard);
-                matchCount++;
-                matchCountDisplay.textContent = matchCount;
                 flippedCards = [];
 
                 if (matchedCards.length === emojis.length) {
                     clearInterval(timerInterval);
-                    alert(`遊戲完成！\n時間: ${timer} 秒\n翻牌次數: ${flipCount}\n配對次數: ${matchCount}`);
+                    alert(`遊戲完成！\n時間: ${timer} 秒\n翻牌次數: ${flipCount}`);
                 }
             } else {
                 setTimeout(() => {
@@ -200,7 +235,6 @@
         function updateStats() {
             timerDisplay.textContent = timer;
             flipCountDisplay.textContent = flipCount;
-            matchCountDisplay.textContent = matchCount;
         }
 
         // 重新開始遊戲
