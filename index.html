@@ -22,6 +22,15 @@
         }
         #game-title span {
             display: inline-block;
+            animation: bounce 1s infinite; /* 小雞跳動動畫 */
+        }
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px); /* 跳動幅度 */
+            }
         }
         #game-board {
             display: grid;
@@ -62,8 +71,8 @@
             font-size: 2em;
         }
         .card-back {
-            background-color: #d4f1d4; /* 粉綠色 */
-            border: 2px solid #a8d5ba; /* 淺綠色框線 */
+            background-color: #a2d5f2; /* 粉藍色 */
+            border: 2px solid #87c1e0; /* 稍深的粉藍色框線 */
             color: #6a4a3a; /* 深紫色文字 */
             font-size: 1.2em;
             transform: rotateY(0deg);
