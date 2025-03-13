@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>復活節翻牌記憶遊戲</title>
+    <style>
+        body {
+            font-family: Times New Roman, 宋體;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #b3daf1;
+        }
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 100px); /* 4 列 */
+            grid-template-rows: repeat(4, 100px);    /* 4 行 */
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .card {
+            width: 100px;
+            height: 100px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+        }
+        .card-front {
+            background-color: #fff1a6;
+            transform: rotateY(180deg);
+            font-size: 3em; /* Emoji 更大 */
+        }
+        .card-back {
+            background-color: #f3a8bc;
+            border: 2px solid #999;
+            color: #ffffff; /* TBMG 字顏色（白色） */
+            font-size: 1.5em; /* TBMG 字更大 */
+        }
+        #stats {
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+        #restart-button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        #countdown {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="countdown">5</div>
+    <div id="stats">
+        時間: <span id="timer">0</span> 秒 | 
+        翻牌次數: <span id="flip-count">0</span> | 
+        配對次數: <span id="match-count">0</span>
+    </div>
+    <div id="game-board"></div>
+    <button id="restart-button">重新開始</button>
+
+    <script>
+        const emojis = [
+            '🐰', '🐰', '🥚', '🥚', '🪺', '🪺', '🐣', '🐣', 
+            '🥳', '🥳', '🦊', '🦊', '🐇', '🐇', '🎀', '🎀', // 新增 4 對 Emoji
+        ];
+        const gameBoard = document.getElementById('game-board');
+        const timerDisplay = document.getElementById('timer');
+        const flipCountDisplay = document.getElementById('flip-count');
+        const matchCountDisplay = document.getElementById('match-count');
+        const restartButton = document.getElementById('restart-button');
+        const countdownDisplay = document.getElementById('countdown');
+
+        let cards = [];
+        let flippedCards = [];
+        let matchedCards = [];
+        let flipCount = 0;
+        let matchCount = 0;
+        let timer = 0;
+        let timerInterval;
+        let countdown = 5;
+
+        // 初始化遊戲
+        function initGame() {
+            gameBoard.innerHTML = '';
+            flippedCards = [];
+            matchedCards = [];
+            flipCount = 0;
+            matchCount = 0;
+            timer = 0;
+            clearInterval(timerInterval);
+            updateStats();
+
+            // 隨機分配 Emoji
+            const shuffledEmojis = emojis.sort(() => Math.random() - 0.5);
+            shuffledEmojis.forEach(emoji => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+
+                const cardInner = document.createElement('div');
+                cardInner.classList.add('card-inner');
+
+                const cardFront = document.createElement('div');
+                cardFront.classList.add('card-front');
+                cardFront.textContent = emoji;
+
+                const cardBack = document.createElement('div');
+                cardBack.classList.add('card-back');
+                cardBack.textContent = 'TBMG';
+
+                cardInner.appendChild(cardFront);
+                cardInner.appendChild(cardBack);
+                card.appendChild(cardInner);
+                gameBoard.appendChild(card);
+
+                card.addEventListener('click', flipCard);
+            });
+
+            // 開始倒數
+            startCountdown();
+        }
+
+        // 開始倒數
+        function startCountdown() {
+            countdown = 5;
+            countdownDisplay.textContent = countdown;
+
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                countdownDisplay.textContent = countdown;
+
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownDisplay.textContent = '開始！';
+                    setTimeout(() => {
+                        countdownDisplay.style.display = 'none';
+                        startGame();
+                    }, 1000);
+                }
+            }, 1000);
+        }
+
+        // 開始遊戲
+        function startGame() {
+            // 啟用卡片點擊
+            cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.style.pointerEvents = 'auto';
+            });
+
+            // 開始計時
+            timerInterval = setInterval(() => {
+                timer++;
+                timerDisplay.textContent = timer;
+            }, 1000);
+        }
+
+        // 翻牌邏輯
+        function flipCard() {
+            if (flippedCards.length < 2 && !this.classList.contains('flipped')) {
+                this.classList.add('flipped');
+                flippedCards.push(this);
+                flipCount++;
+                flipCountDisplay.textContent = flipCount;
+
+                if (flippedCards.length === 2) {
+                    checkMatch();
+                }
+            }
+        }
+
+        // 檢查匹配
+        function checkMatch() {
+            const [firstCard, secondCard] = flippedCards;
+            const firstEmoji = firstCard.querySelector('.card-front').textContent;
+            const secondEmoji = secondCard.querySelector('.card-front').textContent;
+
+            if (firstEmoji === secondEmoji) {
+                matchedCards.push(firstCard, secondCard);
+                matchCount++;
+                matchCountDisplay.textContent = matchCount;
+                flippedCards = [];
+
+                if (matchedCards.length === emojis.length) {
+                    clearInterval(timerInterval);
+                    alert(`遊戲完成！\n時間: ${timer} 秒\n翻牌次數: ${flipCount}\n配對次數: ${matchCount}`);
+                }
+            } else {
+                setTimeout(() => {
+                    firstCard.classList.remove('flipped');
+                    secondCard.classList.remove('flipped');
+                    flippedCards = [];
+                }, 1000);
+            }
+        }
+
+        // 更新統計數據
+        function updateStats() {
+            timerDisplay.textContent = timer;
+            flipCountDisplay.textContent = flipCount;
+            matchCountDisplay.textContent = matchCount;
+        }
+
+        // 重新開始遊戲
+        restartButton.addEventListener('click', initGame);
+
+        // 初始化遊戲
+        initGame();
+    </script>
+</body>
+</html>
