@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐥復活節記憶大挑戰🐥</title>
+    <title>復活節記憶大挑戰</title>
     <style>
         body {
             font-family: 'Times New Roman', '新細明體', serif; /* 英文字體為 Times New Roman，中文字體為新細明體 */
@@ -19,6 +19,18 @@
             color: #9799bb;
             margin-bottom: 20px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        #game-title span {
+            display: inline-block; /* 讓 Emoji 可以獨立應用動畫 */
+            animation: bounce 1s infinite; /* 應用跳動動畫 */
+        }
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0); /* 起始和結束位置 */
+            }
+            50% {
+                transform: translateY(-5px); /* 跳動的最高點 */
+            }
         }
         #game-board {
             display: grid;
@@ -57,10 +69,11 @@
             background-color: #fce38a;
             transform: rotateY(180deg);
             font-size: 2em; /* Emoji 大小調整 */
+            animation: bounce 1s infinite; /* 讓遊戲板上的 Emoji 也跳動 */
         }
         .card-back {
             background-color: #e3abac;
-            border: 2px solid #6a5853;
+            border: 2px solid #eb6d82;
             color: #ffffff; /* TBMG 字顏色（白色） */
             font-size: 1.2em; /* TBMG 字大小調整 */
         }
@@ -93,7 +106,9 @@
 </head>
 <body>
     <!-- 頁面頂部：遊戲名稱 -->
-    <div id="game-title">復活節記憶大挑戰</div>
+    <div id="game-title">
+        <span>🐥</span>復活節記憶大挑戰<span>🐥</span>
+    </div>
 
     <!-- 遊戲統計數據 -->
     <div id="stats">
