@@ -59,7 +59,7 @@
             width: 100%;
             height: 100%;
             position: absolute;
-            backface-visibility: hidden;
+            backface-visibility: hidden; /* 確保背面不可見 */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -67,7 +67,7 @@
         }
         .card-front {
             background-color: #fce38a;
-            transform: rotateY(180deg);
+            transform: rotateY(180deg); /* 正面初始狀態為翻轉 */
             font-size: 2em;
             animation: bounce 1s infinite; /* 僅正面 Emoji 跳動 */
         }
@@ -76,6 +76,7 @@
             border: 2px solid #adddb4; /* 修改框線顏色為 #adddb4 */
             color: #ffffff;
             font-size: 1.2em;
+            transform: rotateY(0deg); /* 背面初始狀態為正面 */
         }
         #stats {
             margin-bottom: 20px;
