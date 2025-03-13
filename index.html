@@ -6,7 +6,7 @@
     <title>復活節記憶大挑戰</title>
     <style>
         body {
-            font-family: 'Times New Roman', '新細明體', serif; /* 英文字體為 Times New Roman，中文字體為新細明體 */
+            font-family: 'Times New Roman', '新細明體', serif;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -21,27 +21,27 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
         #game-title span {
-            display: inline-block; /* 讓 Emoji 可以獨立應用動畫 */
-            animation: bounce 1s infinite; /* 應用跳動動畫 */
+            display: inline-block;
+            animation: bounce 1s infinite;
         }
         @keyframes bounce {
             0%, 100% {
-                transform: translateY(0); /* 起始和結束位置 */
+                transform: translateY(0);
             }
             50% {
-                transform: translateY(-5px); /* 跳動的最高點 */
+                transform: translateY(-5px);
             }
         }
         #game-board {
             display: grid;
-            grid-template-columns: repeat(4, 78px); /* 4 列，寬度設為 78px */
-            grid-template-rows: repeat(4, 88px);   /* 4 行，高度設為 98px */
+            grid-template-columns: repeat(4, 78px);
+            grid-template-rows: repeat(4, 88px);
             gap: 10px;
             margin-bottom: 20px;
         }
         .card {
-            width: 78px;  /* 寬度設為 78px */
-            height: 88px; /* 高度設為 98px */
+            width: 78px;
+            height: 88px;
             perspective: 1000px;
             cursor: pointer;
         }
@@ -68,14 +68,14 @@
         .card-front {
             background-color: #fce38a;
             transform: rotateY(180deg);
-            font-size: 2em; /* Emoji 大小調整 */
-            animation: bounce 1s infinite; /* 讓遊戲板上的 Emoji 也跳動 */
+            font-size: 2em;
+            animation: bounce 1s infinite; /* 僅正面 Emoji 跳動 */
         }
         .card-back {
             background-color: #e3abac;
-            border: 2px solid #eb6d82;
-            color: #ffffff; /* TBMG 字顏色（白色） */
-            font-size: 1.2em; /* TBMG 字大小調整 */
+            border: 2px solid #adddb4; /* 修改框線顏色為 #adddb4 */
+            color: #ffffff;
+            font-size: 1.2em;
         }
         #stats {
             margin-bottom: 20px;
@@ -138,7 +138,7 @@
     <script>
         const emojis = [
             '🐰', '🐰', '🥚', '🥚', '🪺', '🪺', '🐣', '🐣', 
-            '🥳', '🥳', '🦊', '🦊', '🐇', '🐇', '🎀', '🎀', // 新增 4 對 Emoji
+            '🥳', '🥳', '🦊', '🦊', '🐇', '🐇', '🎀', '🎀',
         ];
         const gameBoard = document.getElementById('game-board');
         const timerDisplay = document.getElementById('timer');
@@ -258,7 +258,7 @@
         // 開始遊戲按鈕
         startButton.addEventListener('click', () => {
             startGame();
-            startButton.style.display = 'none'; // 隱藏開始按鈕
+            startButton.style.display = 'none';
         });
 
         // 初始化遊戲
